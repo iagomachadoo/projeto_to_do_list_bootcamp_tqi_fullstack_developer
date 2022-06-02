@@ -14,18 +14,25 @@ function criarEl(nomeEl){
     return document.createElement(nomeEl);
 }
 
-const EL_INPUT_TAREFA = pegarElementos('input')
+const OBJ_PEGANDO_ELEMENTO = {
+    wrapper: pegarElementos('div'),
+    elInputTarefa: pegarElementos('input'),
+    listaDeTarefas: pegarElementos('ul'),
+    elBtnAddTarefa: pegarElementos('button'),
+    pegarBtnLimparLista: pegarElementos('button'),
+}
 
-const EL_BTN_ADICIONAR_TAREFA = pegarElementos('button')
+const CRIANDO_BTN_LIMPAR_LISTA = criarEl('button')
 
-const LISTA_DE_TAREFAS = pegarElementos('ul')
+addEvento(OBJ_PEGANDO_ELEMENTO.elBtnAddTarefa[0], 'click', addTarefa)
 
-addEvento(EL_BTN_ADICIONAR_TAREFA[0], 'click', addTarefa)
+addEvento(CRIANDO_BTN_LIMPAR_LISTA, 'click', limparLista)
+
 
 let textoDigitado = ''
 
 function addTarefa(){
-    textoDigitado = EL_INPUT_TAREFA[0].value
+    textoDigitado = OBJ_PEGANDO_ELEMENTO.elInputTarefa[0].value
 
     const EL_CHECKBOX = '<input type="checkbox" id="tarefa">'
 
@@ -35,9 +42,24 @@ function addTarefa(){
         alert('Escreva uma tarefa')
 
     }else{
-        LISTA_DE_TAREFAS[0].appendChild(criarEl('li')).innerHTML = `${EL_CHECKBOX}${EL_NOME_TAREFA}`
+        OBJ_PEGANDO_ELEMENTO.listaDeTarefas[0].appendChild(criarEl('li')).innerHTML = `${EL_CHECKBOX}${EL_NOME_TAREFA}`
     }
     
-    EL_INPUT_TAREFA[0].value = ''
+    if(pegarElementos('li').length != 0){
+        OBJ_PEGANDO_ELEMENTO.wrapper[0].appendChild(CRIANDO_BTN_LIMPAR_LISTA).innerText = 'Limpar'
+    }
+    
+    OBJ_PEGANDO_ELEMENTO.elInputTarefa[0].value = ''
 }
 
+function limparLista(){
+    const TAREFA = document.querySelectorAll('li');
+    
+    for(let i = 0; i < TAREFA.length; i++){
+        OBJ_PEGANDO_ELEMENTO.listaDeTarefas[0].removeChild(TAREFA[i])
+    }
+
+    if(pegarElementos('li').length === 0){
+        OBJ_PEGANDO_ELEMENTO.wrapper[0].removeChild(OBJ_PEGANDO_ELEMENTO.pegarBtnLimparLista[1])
+    }
+}
